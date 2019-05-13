@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+set -e
+
+java -Dorg.slf4j.simpleLogger.defaultLogLevel=WARN -jar ./build/libs/*.jar $@
