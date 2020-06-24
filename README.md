@@ -3,7 +3,7 @@
 ## Requirements
 
 1. Install JDK 12 (tested on 12 only but may work on other versions).
-2. Setup a personal access OATH token on your github.com account.  See [here](https://developer.github.com/v4/guides/forming-calls/#authenticating-with-graphql)
+2. Setup a personal access OAUTH token on your github.com account.  See [here](https://developer.github.com/v4/guides/forming-calls/#authenticating-with-graphql)
 
 ## Usage
 

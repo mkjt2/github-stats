@@ -75,10 +75,11 @@ class APIHelper {
     //
     // See https://developer.github.com/v4/ for details.
     private fun createReposInfoQuery(org: String, latestCursor: String): JsonObject {
+        val afterValue = if (latestCursor == "")  "null" else "\"$latestCursor\""
         val rawQuery = """
             query {
                 organization(login: "$org") {
-                    repositories(first: $GITHUB_API_MAX_RESULTS_PER_QUERY, after: "$latestCursor") {
+                    repositories(first: $GITHUB_API_MAX_RESULTS_PER_QUERY, after: $afterValue) {
                         pageInfo { endCursor hasNextPage }
                         totalCount
                         nodes {
@@ -127,7 +128,7 @@ class APIHelper {
                     // TODO revisit exception types in kotlin
                     val msg = "status code = ${response.statusCode()}"
                     if (response.statusCode() == 401 || response.statusCode() == 403)
-                        throw EnvironmentError("Is $GITHUB_OAUTH_TOKEN_ENV_VAR set in your environment?")
+                        throw EnvironmentError("Is your access token (set in $GITHUB_OAUTH_TOKEN_ENV_VAR) still valid?")
                     throw Error(msg)
                 }
                 jsonObject = jsonParser.parse(StringBuilder(responseBody)) as JsonObject
@@ -151,7 +152,7 @@ class APIHelper {
             } catch (e: ClassCastException) {
                 logger.warn { "Unexpected JSON structure: $responseBody" }
             } catch (e: EnvironmentError) {
-                logger.warn(e.toString())
+                break
             } catch (e: IOException) {
                 logger.warn(e.toString())
             } catch (e: KotlinNullPointerException) {
